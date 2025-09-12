@@ -37,6 +37,15 @@
       margin-top: 15px;
       font-weight: bold;
     }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+    footer a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: blue;
+    }
   </style>
 </head>
 <body>
@@ -47,58 +56,83 @@
     <button id="nextBtn" style="display:none;">Next Question</button>
   </div>
 
+  <footer>
+    <a href="index.html">BACK</a>
+    <a href="topics.html">NEXT</a>
+  </footer>
+
   <script>
     const quiz = [
-  {
-    question: "Which language is used for web apps?",
-    options: ["Python", "JavaScript", "C++", "Java"],
-    answer: "JavaScript"
-  },
-  {
-    question: "What does CPU stand for?",
-    options: ["Central Process Unit", "Central Processing Unit", "Computer Personal Unit", "Control Processing Unit"],
-    answer: "Central Processing Unit"
-  },
-  {
-    question: "Which company developed VS Code?",
-    options: ["Google", "Apple", "Microsoft", "IBM"],
-    answer: "Microsoft"
-  },
-  {
-    question: "Which language is used for web apps?",
-    options: ["Python", "JavaScript", "C++", "Java"],
-    answer: "JavaScript"
-  }
-  ];
+      {
+        question: "Which language is used for web apps?",
+        options: ["Python", "JavaScript", "C++", "Java"],
+        answer: "JavaScript"
+      },
+      {
+        question: "What does CPU stand for?",
+        options: ["Central Process Unit", "Central Processing Unit", "Computer Personal Unit", "Control Processing Unit"],
+        answer: "Central Processing Unit"
+      },
+      {
+        question: "Which company developed VS Code?",
+        options: ["Google", "Apple", "Microsoft", "IBM"],
+        answer: "Microsoft"
+      },
+      {
+        question: "Which language is used for web apps?",
+        options: ["Python", "JavaScript", "C++", "Java"],
+        answer: "JavaScript"
+      }
+    ];
 
-function checkAnswer(selected) {
-  const q = quiz[currentQuestion];
-  if (selected === q.answer) {
-    resultEl.textContent = "✅ Correct!";
-    score++;
-  } else {
-    resultEl.textContent = `❌ Wrong! Correct answer: ${q.answer}`;
-  }
-  nextBtn.style.display = "block";
-}
+    let currentQuestion = 0;
+    let score = 0;
 
-nextBtn.onclick = () => {
-  currentQuestion++;
-  if (currentQuestion < quiz.length) {
-    loadQuestion();
-  } else {
-    questionEl.textContent = "Quiz Completed!";
-    optionsEl.innerHTML = "";
-    resultEl.textContent = `Your score: ${score}/${quiz.length}`;
-    nextBtn.style.display = "none";
-  }
-};
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const resultEl = document.getElementById("result");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function loadQuestion() {
+      const q = quiz[currentQuestion];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = "";
+      resultEl.textContent = "";
+      nextBtn.style.display = "none";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(option);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const q = quiz[currentQuestion];
+      if (selected === q.answer) {
+        resultEl.textContent = "✅ Correct!";
+        score++;
+      } else {
+        resultEl.textContent = `❌ Wrong! Correct answer: ${q.answer}`;
+      }
+      nextBtn.style.display = "block";
+    }
+
+    nextBtn.onclick = () => {
+      currentQuestion++;
+      if (currentQuestion < quiz.length) {
+        loadQuestion();
+      } else {
+        questionEl.textContent = "Quiz Completed!";
+        optionsEl.innerHTML = "";
+        resultEl.textContent = `Your score: ${score}/${quiz.length}`;
+        nextBtn.style.display = "none";
+      }
+    };
 
     // Load the first question
     loadQuestion();
   </script>
 </body>
-<footer>
-<a href="index.html">BACK</a>
-<a href="topics.html">NEXT</a></footer>
 </html>
