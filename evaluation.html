@@ -13,254 +13,165 @@
     .quiz-container {
       background: white;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       max-width: 600px;
       margin: auto;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    h2 { margin-bottom: 10px; }
-    .options button {
-      display: block;
-      margin: 8px 0;
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      background: #e0e0e0;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .options button:hover {
-      background: #cfd8dc;
-    }
-    #result {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    footer {
+    h2 {
       text-align: center;
-      margin-top: 20px;
     }
-    footer a {
-      margin: 0 10px;
-      text-decoration: none;
-      color: blue;
+    .question {
+      margin-bottom: 15px;
     }
-    #studentForm { margin-bottom: 20px; }
-    #studentForm input {
-      margin: 5px 0;
-      padding: 8px;
-      width: 95%;
-    }
-    #startBtn {
-      margin-top: 10px;
-      padding: 10px;
-      width: 100%;
-      background: #4CAF50;
-      color: white;
+    button {
+      padding: 10px 15px;
       border: none;
-      border-radius: 6px;
+      background: #007BFF;
+      color: white;
+      border-radius: 5px;
       cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="quiz-container" id="formContainer">
-    <h2>Enter Student Details</h2>
-    <form id="studentForm">
-      <input type="text" id="name" placeholder="Full Name" required><br>
-      <input type="text" id="class" placeholder="Class (e.g. JSS2)" required><br>
-      <button type="button" id="startBtn">Start Quiz</button>
-    </form>
-  </div>
 
-  <!-- FIX: Added id="quizContainer" -->
-  <div class="quiz-container" id="quizContainer" style="display:none;">
-    <h2 id="question">Question text</h2>
-    <div class="options" id="options"></div>
-    <p id="result"></p>
-    <button id="nextBtn" style="display:none;">Next Question</button>
-  </div>
+<div class="quiz-container" id="studentDetails">
+  <h2>Student Details</h2>
+  <label>Name: <input type="text" id="studentName"></label><br><br>
+  <label>Class: <input type="text" id="studentClass"></label><br><br>
+  <button onclick="startQuiz()">Start Quiz</button>
+</div>
 
-  <footer>
-    <a href="index.html">BACK</a>
-    <a href="topics.html">NEXT</a>
-  </footer>
+<div class="quiz-container" id="quiz" style="display:none;">
+  <h2>Evaluation Questions</h2>
+  <div id="questionContainer"></div>
+  <button onclick="nextQuestion()">Next</button>
+  <div class="result" id="result"></div>
+</div>
 
-  <script>
-    const quiz = [
-      {
-        question: "Technology can best be defined as:",
-        options: ["The study of animals and plants", "The use of scientific knowledge to solve problems", "Playing with machines for fun", "An art of drawing pictures"],
-        answer: "The use of scientific knowledge to solve problems"
-      },
-      {
-        question: "Which of the following is a technological tool?",
-        options: ["Basket", "Hammer", "Cutlass", "Hoe"],
-        answer: "Hammer"
-      },
-      {
-        question: "The first rule of workshop safety is to:",
-        options: ["Leave machines on", "Play with sharp tools", "Wear proper safety gadgets", "Run inside the workshop"],
-        answer: "Wear proper safety gadgets"
-      },
-      {
-        question: "Which of these is a safety wear in the workshop?",
-        options: ["Slippers", "Safety goggles", "Sunglasses", "Cap"],
-        answer: "Safety goggles"
-      },
-       {
-        question: "Which of the following is a metallic material?",
-        options: ["Glass", "Plastic", "Copper", "Rubber"],
-        answer: "Copper"
-      },
-       {
-        question: "A good insulator among the following is:",
-        options: ["Iron", "Aluminium", "Plastic", "Steel"],
-        answer: "Plastic"
-      },
-       {
-        question: "The main instrument used for drawing circles is the:",
-        options: ["Ruler", "Compass", "Protractor", "Set-square"],
-        answer: "Compass"
-      },
-       {
-        question: "In technical drawing, the thick continuous line is used for:",
-        options: ["Visible outlines", "Dimension lines", "Hidden lines", "Construction lines"],
-        answer: "Visible outlines"
-      },
-       {
-        question: "Which of the following is a hardwood?",
-        options: ["Bamboo", "Pine", "Cedar", "Mahogany"],
-        answer: "Mahogany"
-      },
-       {
-        question: "A saw used for cutting across the grain of wood is called:",
-        options: ["Rip saw", "Hack saw", "Tenon saw", "Coping saw"],
-        answer: "Tenon saw"
-      },
-       {
-        question: "The furnace used in melting iron is called:",
-        options: ["Electric furnace", "Blast furnace", "Cupola", "Gas furnace"],
-        answer: "Blast furnace"
-      },
-      {
-        question: "Which of the following tools is used to hold metals firmly during filing?",
-        options: ["Vice", "Hammer", "Spanner", "Drill"],
-        answer: "Vice"
-      },
-       {
-        question: "The part of the car that controls its direction is the:",
-        options: ["Brake", "Accelerator", "Gear", "Steering wheel"],
-        answer: "Steering wheel"
-      },
-       {
-        question: "Which of the following fuels is commonly used by cars in Nigeria?",
-        options: ["Gasoline", "Kerosene", "Petrol", "Diesel oil"],
-        answer: "Petrol"
-      },
-       {
-        question: "The flow of electric current in a circuit is measured using a:",
-        options: ["Voltmeter", "Ammeter", "Ohmmeter", "Thermometer"],
-        answer: "Ammeter"
-      },
-       {
-        question: "Which of these is a good conductor of electricity?",
-        options: ["Copper", "Wood", "Rubber", "Glass"],
-        answer: "Copper"
-      },
-       {
-        question: "The full meaning of ICT is:",
-        options: ["International Computer Technology", "Internet Communication Training", "Information and Communication Technology", "Integrated Computer Terminology"],
-        answer: "Information and Communication Technology"
-      },
-       {
-        question: "Which of these is NOT an input device of a computer?",
-        options: ["Keyboard", "Monitor", "Mouse", "Scanner"],
-        answer: "Monitor"
-      },
-       {
-        question: "The part of a computer that displays information to the user is the:",
-        options: ["Keyboard", "Monitor", "Mouse", "CPU"],
-        answer: "Monitor"
-      },
-       {
-        question: "The worldwide network of computers that share information is called:",
-        options: ["Telephone line", "World Wide Web", "Intranet", "Bluetooth"],
-        answer: "World Wide Web"
-      }
-    ];
+<!-- 🔹 Student Records Section -->
+<div class="quiz-container" id="recordsContainer" style="display:none;">
+  <h2>All Student Records</h2>
+  <ul id="recordsList"></ul>
+</div>
 
-    let currentQuestion = 0;
-    let score = 0;
-    let studentName = "";
-    let studentClass = "";
+<script>
+  const quiz = [
+    {question: "Which of the following is a source of energy?", options: ["Battery", "Switch", "Bulb", "Fan"], answer: "Battery"},
+    {question: "The process of joining metals by melting a filler metal is called?", options: ["Filing", "Casting", "Soldering", "Forging"], answer: "Soldering"},
+    {question: "Which tool is used for drawing straight lines in Technical Drawing?", options: ["Compass", "Set square", "Ruler", "Divider"], answer: "Ruler"},
+    {question: "In workshop safety, which of these should NOT be worn?", options: ["Safety boots", "Loose clothing", "Goggles", "Helmet"], answer: "Loose clothing"},
+    {question: "ICT stands for?", options: ["Information and Communication Technology", "International Communication Tool", "Internal Computer Technology", "Information Control Technique"], answer: "Information and Communication Technology"},
+    {question: "Which of these is a softwood?", options: ["Iroko", "Mahogany", "Pine", "Opepe"], answer: "Pine"},
+    {question: "The negative terminal of a battery is called?", options: ["Anode", "Cathode", "Positive", "Neutral"], answer: "Cathode"},
+    {question: "Which of these is not a metal?", options: ["Aluminium", "Copper", "Plastic", "Iron"], answer: "Plastic"},
+    {question: "The part of the car that transmits power from the engine to the wheels is?", options: ["Chassis", "Gearbox", "Axle", "Carburetor"], answer: "Gearbox"},
+    {question: "Which of these materials is non-metallic?", options: ["Steel", "Brass", "Glass", "Copper"], answer: "Glass"},
+    {question: "The two main types of circuit connections are?", options: ["Positive and Negative", "Open and Closed", "Series and Parallel", "High and Low"], answer: "Series and Parallel"},
+    {question: "Which drawing instrument is used to draw circles?", options: ["Set square", "Compass", "T-square", "Protractor"], answer: "Compass"},
+    {question: "The main fuel used in most cars is?", options: ["Diesel", "Kerosene", "Petrol", "Gas"], answer: "Petrol"},
+    {question: "The tool used to smooth wood surfaces is?", options: ["Saw", "Hammer", "Plane", "Chisel"], answer: "Plane"},
+    {question: "Which device is used to store information permanently?", options: ["RAM", "Monitor", "Hard Disk", "Mouse"], answer: "Hard Disk"},
+    {question: "The thick black line in technical drawing is known as?", options: ["Object line", "Hidden line", "Projection line", "Center line"], answer: "Object line"},
+    {question: "Which of these is an output device?", options: ["Keyboard", "Mouse", "Printer", "Scanner"], answer: "Printer"},
+    {question: "Which machine is used to cut metal in the workshop?", options: ["Lathe", "Shovel", "Hacksaw", "Spanner"], answer: "Hacksaw"},
+    {question: "The wooden part of a tree from which timber is obtained is?", options: ["Root", "Stem", "Leaf", "Branch"], answer: "Stem"},
+    {question: "What type of current is supplied to our homes?", options: ["Direct Current (DC)", "Alternating Current (AC)", "Positive Current", "Negative Current"], answer: "Alternating Current (AC)"}
+  ];
 
-    const questionEl = document.getElementById("question");
-    const optionsEl = document.getElementById("options");
-    const resultEl = document.getElementById("result");
-    const nextBtn = document.getElementById("nextBtn");
+  let currentQuestion = 0;
+  let score = 0;
+  let studentName = "";
+  let studentClass = "";
 
-    // Start quiz after form submission
-    document.getElementById("startBtn").onclick = () => {
-      studentName = document.getElementById("name").value;
-      studentClass = document.getElementById("class").value;
+  function startQuiz() {
+    studentName = document.getElementById("studentName").value.trim();
+    studentClass = document.getElementById("studentClass").value.trim();
 
-      if(studentName && studentClass){
-        document.getElementById("formContainer").style.display = "none";
-        document.getElementById("quizContainer").style.display = "block";
-        loadQuestion();
-      } else {
-        alert("Please enter your name and class.");
-      }
-    };
+    if (!studentName || !studentClass) {
+      alert("Please enter your name and class.");
+      return;
+    }
 
-    function loadQuestion() {
-      const q = quiz[currentQuestion];
-      questionEl.textContent = q.question;
-      optionsEl.innerHTML = "";
-      resultEl.textContent = "";
-      nextBtn.style.display = "none";
+    document.getElementById("studentDetails").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+    showQuestion();
+  }
 
-      q.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.textContent = option;
-        btn.onclick = () => checkAnswer(option);
-        optionsEl.appendChild(btn);
+  function showQuestion() {
+    let q = quiz[currentQuestion];
+    let questionContainer = document.getElementById("questionContainer");
+    questionContainer.innerHTML = `
+      <div class="question">
+        <p>${currentQuestion + 1}. ${q.question}</p>
+        ${q.options.map(opt => `
+          <label>
+            <input type="radio" name="question${currentQuestion}" value="${opt}"> ${opt}
+          </label><br>`).join("")}
+      </div>
+    `;
+  }
+
+  function nextQuestion() {
+    let selected = document.querySelector(`input[name="question${currentQuestion}"]:checked`);
+    if (!selected) {
+      alert("Please select an answer.");
+      return;
+    }
+
+    if (selected.value === quiz[currentQuestion].answer) {
+      score++;
+    }
+
+    currentQuestion++;
+    if (currentQuestion < quiz.length) {
+      showQuestion();
+    } else {
+      document.getElementById("quiz").style.display = "none";
+      let resultEl = document.getElementById("result");
+      resultEl.innerHTML = `
+        <p><strong>Name:</strong> ${studentName}</p>
+        <p><strong>Class:</strong> ${studentClass}</p>
+        <p><strong>Score:</strong> ${score}/${quiz.length}</p>
+      `;
+
+      // Save result to localStorage
+      let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+      records.push({name: studentName, class: studentClass, score: score});
+      localStorage.setItem("quizRecords", JSON.stringify(records));
+
+      // Show all stored records
+      showRecords();
+    }
+  }
+
+  // 🔹 Function to show stored student records
+  function showRecords() {
+    let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+    const list = document.getElementById("recordsList");
+    list.innerHTML = "";
+
+    if (records.length === 0) {
+      list.innerHTML = "<li>No records found yet.</li>";
+    } else {
+      records.forEach((rec, index) => {
+        let li = document.createElement("li");
+        li.textContent = `${index + 1}. ${rec.name} (${rec.class}) - Score: ${rec.score}/${quiz.length}`;
+        list.appendChild(li);
       });
     }
 
-    function checkAnswer(selected) {
-      const q = quiz[currentQuestion];
-      if (selected === q.answer) {
-        resultEl.textContent = "✅ Correct!";
-        score++;
-      } else {
-        resultEl.textContent = `❌ Wrong! Correct answer: ${q.answer}`;
-      }
-      nextBtn.style.display = "block";
-    }
+    document.getElementById("recordsContainer").style.display = "block";
+  }
+</script>
 
-    nextBtn.onclick = () => {
-      currentQuestion++;
-      if (currentQuestion < quiz.length) {
-        loadQuestion();
-      } else {
-        questionEl.textContent = "Quiz Completed!";
-        optionsEl.innerHTML = "";
-        resultEl.innerHTML = `
-          <p><strong>Name:</strong> ${studentName}</p>
-          <p><strong>Class:</strong> ${studentClass}</p>
-          <p><strong>Score:</strong> ${score}/${quiz.length}</p>
-        `;
-        nextBtn.style.display = "none";
-
-        // Store in localStorage (optional)
-        let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
-        records.push({name: studentName, class: studentClass, score: score});
-        localStorage.setItem("quizRecords", JSON.stringify(records));
-      }
-    };
-  </script>
 </body>
 </html>
