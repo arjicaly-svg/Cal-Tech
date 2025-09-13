@@ -46,7 +46,7 @@
       text-decoration: none;
       color: blue;
     }
-     #studentForm { margin-bottom: 20px; }
+    #studentForm { margin-bottom: 20px; }
     #studentForm input {
       margin: 5px 0;
       padding: 8px;
@@ -73,7 +73,9 @@
       <button type="button" id="startBtn">Start Quiz</button>
     </form>
   </div>
-  <div class="quiz-container">
+
+  <!-- FIX: Added id="quizContainer" -->
+  <div class="quiz-container" id="quizContainer" style="display:none;">
     <h2 id="question">Question text</h2>
     <div class="options" id="options"></div>
     <p id="result"></p>
@@ -114,8 +116,8 @@
       },
        {
         question: "A good insulator among the following is:",
-        options: ["A. Iron", "B. Aluminium", "C. Plastic", "D. Steel"],
-        answer: "C. Plastic"
+        options: ["Iron", "Aluminium", "Plastic", "Steel"],
+        answer: "Plastic"
       },
        {
         question: "The main instrument used for drawing circles is the:",
@@ -134,7 +136,7 @@
       },
        {
         question: "A saw used for cutting across the grain of wood is called:",
-        options: ["Rip saw", "Hack saw", "Tenon saw", "D. Coping saw"],
+        options: ["Rip saw", "Hack saw", "Tenon saw", "Coping saw"],
         answer: "Tenon saw"
       },
        {
@@ -142,14 +144,14 @@
         options: ["Electric furnace", "Blast furnace", "Cupola", "Gas furnace"],
         answer: "Blast furnace"
       },
- {
+      {
         question: "Which of the following tools is used to hold metals firmly during filing?",
         options: ["Vice", "Hammer", "Spanner", "Drill"],
         answer: "Vice"
       },
        {
         question: "The part of the car that controls its direction is the:",
-        options: ["Brake", "Accelerator", "Gear:", "Steering wheel"],
+        options: ["Brake", "Accelerator", "Gear", "Steering wheel"],
         answer: "Steering wheel"
       },
        {
@@ -246,25 +248,19 @@
       } else {
         questionEl.textContent = "Quiz Completed!";
         optionsEl.innerHTML = "";
-        optionsEl.innerHTML = "";
         resultEl.innerHTML = `
           <p><strong>Name:</strong> ${studentName}</p>
           <p><strong>Class:</strong> ${studentClass}</p>
           <p><strong>Score:</strong> ${score}/${quiz.length}</p>
         `;
-        resultEl.textContent = `Your score: ${score}/${quiz.length}`;
         nextBtn.style.display = "none";
-      }
-    };
-    // Store in localStorage (optional)
+
+        // Store in localStorage (optional)
         let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
         records.push({name: studentName, class: studentClass, score: score});
         localStorage.setItem("quizRecords", JSON.stringify(records));
       }
     };
-
-    // Load the first question
-    loadQuestion();
   </script>
 </body>
 </html>
