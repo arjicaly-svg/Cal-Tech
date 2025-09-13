@@ -46,9 +46,33 @@
       text-decoration: none;
       color: blue;
     }
+     #studentForm { margin-bottom: 20px; }
+    #studentForm input {
+      margin: 5px 0;
+      padding: 8px;
+      width: 95%;
+    }
+    #startBtn {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+  <div class="quiz-container" id="formContainer">
+    <h2>Enter Student Details</h2>
+    <form id="studentForm">
+      <input type="text" id="name" placeholder="Full Name" required><br>
+      <input type="text" id="class" placeholder="Class (e.g. JSS2)" required><br>
+      <button type="button" id="startBtn">Start Quiz</button>
+    </form>
+  </div>
   <div class="quiz-container">
     <h2 id="question">Question text</h2>
     <div class="options" id="options"></div>
@@ -167,11 +191,27 @@
 
     let currentQuestion = 0;
     let score = 0;
+    let studentName = "";
+    let studentClass = "";
 
     const questionEl = document.getElementById("question");
     const optionsEl = document.getElementById("options");
     const resultEl = document.getElementById("result");
     const nextBtn = document.getElementById("nextBtn");
+
+    // Start quiz after form submission
+    document.getElementById("startBtn").onclick = () => {
+      studentName = document.getElementById("name").value;
+      studentClass = document.getElementById("class").value;
+
+      if(studentName && studentClass){
+        document.getElementById("formContainer").style.display = "none";
+        document.getElementById("quizContainer").style.display = "block";
+        loadQuestion();
+      } else {
+        alert("Please enter your name and class.");
+      }
+    };
 
     function loadQuestion() {
       const q = quiz[currentQuestion];
@@ -206,8 +246,20 @@
       } else {
         questionEl.textContent = "Quiz Completed!";
         optionsEl.innerHTML = "";
+        optionsEl.innerHTML = "";
+        resultEl.innerHTML = `
+          <p><strong>Name:</strong> ${studentName}</p>
+          <p><strong>Class:</strong> ${studentClass}</p>
+          <p><strong>Score:</strong> ${score}/${quiz.length}</p>
+        `;
         resultEl.textContent = `Your score: ${score}/${quiz.length}`;
         nextBtn.style.display = "none";
+      }
+    };
+    // Store in localStorage (optional)
+        let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+        records.push({name: studentName, class: studentClass, score: score});
+        localStorage.setItem("quizRecords", JSON.stringify(records));
       }
     };
 
